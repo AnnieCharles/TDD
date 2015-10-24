@@ -1,0 +1,77 @@
+Enter file contents hereimport java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class InternalCombustionEngine implements Engine {
+
+	private final int BATCH_SIZE = 8;
+    private boolean running;
+    private int fuelLevel;
+    private FuelType requiredFuelType;
+    private FuelType fuelType;
+    
+    private static final List<FuelType> SUPPORTED_FUELTYPE ;
+	
+	static{
+		List<FuelType> supportedFueltype =  new ArrayList <FuelType>(); 
+		supportedFueltype.add(FuelType.PETROL);
+		supportedFueltype.add(FuelType.DIESEL);
+		SUPPORTED_FUELTYPE = Collections.unmodifiableList(supportedFueltype);
+	}
+
+    public InternalCombustionEngine(FuelType requiredFuelType) {
+    	checkIfRequiredFuelTypeIsSupported(requiredFuelType);
+        this.requiredFuelType = requiredFuelType;
+        running = false;
+        fuelLevel = 0;
+    }
+
+    public void start() {
+        if (fuelLevel > MIN_FUEL_LEVEL && requiredFuelType.equals(fuelType)) {
+            running = true;
+        } else {
+            throw new IllegalStateException("Not able to start engine.");
+        }
+    }
+
+    public void stop() {
+        running = false;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void fill(FuelType fuelType, int fuelLevel) {
+        if (fuelLevel >= MIN_FUEL_LEVEL && fuelLevel <= MAX_FUEL_LEVEL) {
+            this.fuelLevel = fuelLevel;
+        }
+        else if (fuelLevel > MAX_FUEL_LEVEL) {
+            this.fuelLevel = MAX_FUEL_LEVEL;
+        }
+        else {
+            this.fuelLevel = MIN_FUEL_LEVEL;
+        }
+
+        this.fuelType = fuelType;
+    }
+
+    public FuelType getFuelType() {
+        return  requiredFuelType;
+    }
+
+	public int getBatchSize() {
+		
+		return BATCH_SIZE;
+	}
+	
+	/**
+	 * @param fuelType
+	 * @throws IllegalArgumentException
+	 */
+	private void checkIfRequiredFuelTypeIsSupported(FuelType fuelType) throws IllegalStateException {
+		if(!SUPPORTED_FUELTYPE.contains(fuelType)){
+		throw new IllegalStateException ("Attempt to fill wrong fuel, Internal Combustion "
+				+ "Engine can only be filled with Petrol or Disel ");
+		}
+	}

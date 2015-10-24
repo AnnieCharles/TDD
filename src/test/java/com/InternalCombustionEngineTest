@@ -1,0 +1,39 @@
+import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+
+public class InternalCombustionEngineTest {
+	
+	
+	@Test
+	public void batchSize_ShouldReturEight(){
+		InternalCombustionEngine engine = new InternalCombustionEngine(FuelType.DIESEL);
+		int batchSize = engine.getBatchSize();
+		assertThat(batchSize, equalTo(8));
+	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void fillFuel_CanBeFilledOnly_WithPetrolOrDisel(){
+		InternalCombustionEngine engine = new InternalCombustionEngine(FuelType.COAL);
+	}
+	
+
+	@Test
+	public void getFuelCostPerBatch_ShouldReturnTheCost_ForPetrol(){
+		double petrolCostPerBatch = FuelType.PETROL.fuelCostPerBatch();
+		assertThat(petrolCostPerBatch, equalTo(9.0));
+		
+	}
+	
+	@Test
+	public void getFuelCostPerBatch_ShouldReturnTheCost_ForDisel(){
+		double diselCostPerBatch = FuelType.DIESEL.fuelCostPerBatch();
+		assertThat(diselCostPerBatch, equalTo(12.0));
+		
+	}
+	
+	
+	
+	
+}

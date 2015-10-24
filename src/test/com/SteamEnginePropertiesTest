@@ -1,0 +1,48 @@
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.junit.Test;
+
+
+public class SteamEnginePropertiesTest {
+
+	private SteamEngine steamEngine = new SteamEngine(FuelType.WOOD);
+	
+	@Test
+	public void fillFuel_CanBeFilled_WithWood(){
+		steamEngine.fillFuel(FuelType.WOOD, 25);
+		assertThat(steamEngine.getFuelType(), equalTo(FuelType.WOOD));
+	}
+	
+	@Test
+	public void fillFuel_CanBeFilled_WithCoal(){
+		steamEngine.fillFuel(FuelType.COAL, 25);
+		assertThat(steamEngine.getFuelType(), equalTo(FuelType.COAL));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void fillFuel_CanBeFilledOnly_WithWoodOrCoal(){
+		steamEngine.fillFuel(FuelType.PETROL,25);
+	}
+	
+	@Test
+	public void getFuelCostPerBatch_ShouldReturnTheCost_ForWood(){
+		double woodCostPerBatch = FuelType.WOOD.fuelCostPerBatch();
+		assertThat(woodCostPerBatch, equalTo(4.35));
+		
+	}
+	
+	@Test
+	public void getFuelCostPerBatch_ShouldReturnTheCost_ForCoal(){
+		double coalCostPerBatch = FuelType.COAL.fuelCostPerBatch();
+		assertThat(coalCostPerBatch, equalTo(5.65));
+		
+	}
+	
+	@Test
+	public void batchSize_ShouldReturnTwo(){
+		int batchSize = steamEngine.getBatchSize();
+		assertThat(batchSize, equalTo(2));
+	}
+	
+}

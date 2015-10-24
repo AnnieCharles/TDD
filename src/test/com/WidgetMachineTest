@@ -1,0 +1,58 @@
+import static org.hamcrest.CoreMatchers.equalTo;
+//	import org.springframework.context.ApplicationContext;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.junit.Test;
+
+public class WidgetMachineTest {
+	
+	@Test
+	public void costForProducing_TwoWidgets_ForICPetrolEngine(){
+		
+		//ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+	//	Widget widgets =  (Widget) ctx.getBean("widget");
+		
+		Engine internalCombustionEngine = new InternalCombustionEngine(FuelType.PETROL);
+		internalCombustionEngine.fill(FuelType.PETROL, 50);
+		Widget widgets = new WidgetMachine(internalCombustionEngine);
+		
+		double cost = widgets.produceWidgets(2);
+		
+		double productionCostForPetrolEngine = 9;
+		assertThat(cost, equalTo(productionCostForPetrolEngine));
+		
+	}
+	
+	@Test
+	public void  costForProducing_FourWidgets_ForICDiselEngine(){
+		
+		InternalCombustionEngine internalCombustionEngine = new InternalCombustionEngine(FuelType.DIESEL);
+		internalCombustionEngine.fill(FuelType.DIESEL, 20);
+		Widget widgets = new WidgetMachine(internalCombustionEngine);
+		
+		double cost = widgets.produceWidgets(4);
+		
+		double productionCostForDiselEngine = 12;
+		assertThat(cost,equalTo(productionCostForDiselEngine));
+	}
+	
+	
+	@Test
+	public void costForProducing_TenWidgets_ForSteamCoalEngine(){
+		
+		SteamEngine steamEngine = new SteamEngine(FuelType.COAL);
+		steamEngine.fill(FuelType.COAL, 35);
+		Widget widgets = new WidgetMachine(steamEngine);
+		
+		double cost = widgets.produceWidgets(10);
+		
+		double productionCostForCoalEngine = 28.25;
+		assertThat(cost, equalTo(productionCostForCoalEngine));
+		
+	}
+	
+		
+	/*@Test
+	public void  costForProducing_ThreeWidgets_For*/
+
+}

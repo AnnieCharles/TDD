@@ -1,0 +1,9 @@
+public interface Widget {
+	/**
+	 *  
+	 * @param quantity
+	 * @return
+	 */
+	public double produceWidgets(int quantity);
+
+}

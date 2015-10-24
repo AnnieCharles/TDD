@@ -1,0 +1,101 @@
+public class SteamEngine implements Engine {
+
+	private final int BATCH_SIZE = 2;
+
+	private FuelType requiredFuelType;
+
+	private int fuelLevel;
+
+	private FuelType fuelType;
+
+	private boolean isRunning;
+
+	private static final List<FuelType> SUPPORTED_FUEL_TYPES;
+
+	static {
+		List<FuelType> supportedFueltype = new ArrayList<FuelType>();
+		supportedFueltype.add(FuelType.COAL);
+		supportedFueltype.add(FuelType.WOOD);
+		SUPPORTED_FUEL_TYPES = Collections.unmodifiableList(supportedFueltype);
+	}
+
+	public SteamEngine(FuelType requiredFuelType) {
+		checkIfRequiredFuelTypeIsSupported(requiredFuelType);
+		this.requiredFuelType = requiredFuelType;
+		isRunning = false;
+		fuelLevel = 0;
+	}
+
+	public void start() {
+		if (fuelLevel > MIN_FUEL_LEVEL && requiredFuelType.equals(fuelType)) {
+			isRunning = true;
+		} else {
+			throw new IllegalStateException("Not able to start engine.");
+		}
+	}
+
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	public void stop() {
+		isRunning = false;
+	}
+
+	/**
+	 * Returns the fuel type for Steam Engine
+	 * 
+	 * @return
+	 */
+	public FuelType getFuelType() {
+		return requiredFuelType;
+	}
+
+	/**
+	 * Fills the Steam Engine with only two types of fuel – wood or coal
+	 * Assumption: MaxFuelLevel is 100
+	 * 
+	 * @param fuelLevel
+	 * @throws IllegalArgumentException
+	 */
+	public void fill(FuelType fuelType, int fuelLevel)
+			throws IllegalArgumentException {
+		checkIfRequiredFuelTypeIsSupported(fuelType);
+		
+		if (fuelLevel >= MIN_FUEL_LEVEL && fuelLevel <= MAX_FUEL_LEVEL) {
+	            this.fuelLevel = fuelLevel;
+	        }
+	        else if (fuelLevel > MAX_FUEL_LEVEL) {
+	            this.fuelLevel = MAX_FUEL_LEVEL;
+	        }
+	        else {
+	            this.fuelLevel = MIN_FUEL_LEVEL;
+	        }
+
+	        this.fuelType = fuelType;
+	}
+
+	/**
+	 * Returns the batch size of Steam Engine.
+	 * 
+	 * @return
+	 */
+	@Override
+	public int getBatchSize() {
+		return BATCH_SIZE;
+	}
+
+	/**
+	 * @param fuelType
+	 * @throws IllegalArgumentException
+	 */
+	private void checkIfRequiredFuelTypeIsSupported(FuelType fuelType)
+			throws IllegalArgumentException {
+		if (!SUPPORTED_FUEL_TYPES.contains(fuelType)) {
+			throw new IllegalArgumentException(
+					"Attempt to fill wrong fuel, Steam "
+							+ "Engine can only be filled with Coal or Wood ");
+		}
+	}
+
+}

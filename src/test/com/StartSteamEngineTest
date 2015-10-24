@@ -1,0 +1,43 @@
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.junit.Test;
+
+public class StartSteamEngineTest {
+	
+	private SteamEngine steamEngine = new SteamEngine(FuelType.COAL);
+	
+	@Test(expected = IllegalStateException.class)
+	public void shouldNotStart_WhenFuelLevel_IsLessThanOrEqulaToZero() {
+		steamEngine.start();
+	}
+
+	@Test (expected = IllegalStateException.class)
+	public void	shouldNotStart_WhenDifferentFuelIsFilled_OtherThanRequired(){
+	  steamEngine.fill(FuelType.WOOD, 10);
+	  steamEngine.start();
+	}
+	
+	@Test
+	public void shouldStart_WhenFuelLevelIsGreaterThanZero_AndRequiredFuelFilled(){
+		steamEngine.fill(FuelType.COAL, 25);
+		steamEngine.start();
+	}
+	
+	@Test
+	public void  isRunning_ShouldReturnTrue_IfTheEngineHasBeenStarted(){
+		steamEngine.fill(FuelType.COAL, 25);
+		steamEngine.start();
+		boolean status = steamEngine.isRunning();
+		assertThat(status, equalTo(true));
+	}
+	
+	@Test
+	public void stop_ShouldReturnFalse(){
+		steamEngine.fill(FuelType.COAL, 40);
+		steamEngine.stop();
+		boolean status = steamEngine.isRunning();
+		assertThat(status, equalTo(false));
+	}
+	
+}
